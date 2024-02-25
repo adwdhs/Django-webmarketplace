@@ -1,0 +1,71 @@
+{% extends 'core/base.html'%}
+
+{% block title %}Items{% endblock title %}
+
+
+
+
+
+{% block content%}
+<h2 class='mb-6 text-2xl text-center'>Newest Items</h2>
+
+<div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100 p-3 rounded-xl">
+
+    <div class="col-span-1 rounded-xl">
+        <form class="" method="get" action="{% url 'items' %}">
+            <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{query}}" placeholder="Search Items...">
+
+        </form>
+
+        <hr class="my-5">
+        <p class="font-semibold text-xl">Categories</p>
+
+        <ul>
+            <li class="py-2 px-2 rounded-xl{% if not category_id%} bg-gray-200{% endif %}">
+                <a href="{% url 'items' %}?query=">All</a>
+            </li>
+
+            {% for category in categories %}
+            <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
+                <a href="{% url 'items' %}?query={{query}}&category={{category.id}}">{{category.name}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    <div class="col-span-3">
+        <div class="grid grid-cols-3 gap-3">
+        {% for item in items %}
+        <div>
+            <a href="{% url 'details' item.id %}">
+                <div>
+                    <img src = '{{item.image.url}}' class="rounded-t-xl">
+                </div>
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h2 class="text-2xl">{{item.name}}</h2>
+                    <p class="text-gray-500">Price: {{item.price}} PLN</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+</div>
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class='mb-12 text-2xl text-center'>Categories</h2>
+
+    <div class="grid grid-cols-3 gap-3">
+        {% for category in categories%}
+        <div>
+            <a href="#">
+
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h2 class="text-2xl">{{category.name}}</h2>
+                    <p class="text-gray-500">{{category.items.count}} items</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content%}
